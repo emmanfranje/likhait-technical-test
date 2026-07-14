@@ -63,7 +63,7 @@ RSpec.describe "Api::Expenses", type: :request do
 
         expect {
           post "/api/expenses", params: invalid_params, as: :json
-        }.to change(Expense, :count).by(0)
+        }.not_to change(Expense, :count)
         expect(response).to have_http_status(:unprocessable_content)
       end
 
