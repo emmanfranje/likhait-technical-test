@@ -4,7 +4,7 @@
 
 import React from "react";
 import { ExpenseFormData } from "../types";
-import { TextField, SelectBox, Button } from "../vibes";
+import { TextField, SelectBox, Button, Modal } from "../vibes";
 import { useExpenseForm } from "../hooks/useExpenseForm";
 import { useCategoryOptions } from "../hooks/useCategoryOptions";
 
@@ -112,42 +112,6 @@ export function ExpenseForm({
             required
           />
         </div>
-
-        {isAddingCategory && (
-          <div
-            style={{
-              display: "flex",
-              gap: "0.5rem",
-              alignItems: "flex-start",
-              marginTop: "0.5rem",
-            }}
-          >
-            <TextField
-              placeholder="New category name"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              error={categoryError}
-              fullWidth
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() =>
-                saveNewCategory((name) => handleChange("category", name))
-              }
-              disabled={isSavingCategory}
-            >
-              {isSavingCategory ? "Adding..." : "Add"}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={cancelAddingCategory}
-            >
-              Cancel
-            </Button>
-          </div>
-        )}
       </div>
 
       <TextField
@@ -180,6 +144,45 @@ export function ExpenseForm({
           </Button>
         )}
       </div>
+
+      <Modal
+        isOpen={isAddingCategory}
+        onClose={cancelAddingCategory}
+        title="Add New Category"
+        maxWidth="400px"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <TextField
+            label="Category Name"
+            placeholder="e.g. Subscriptions"
+            value={newCategoryName}
+            onChange={(e) => setNewCategoryName(e.target.value)}
+            error={categoryError}
+            fullWidth
+            autoFocus
+          />
+          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={cancelAddingCategory}
+              disabled={isSavingCategory}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() =>
+                saveNewCategory((name) => handleChange("category", name))
+              }
+              disabled={isSavingCategory}
+            >
+              {isSavingCategory ? "Adding..." : "Add Category"}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </form>
   );
 }
